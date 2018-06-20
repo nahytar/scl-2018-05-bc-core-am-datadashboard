@@ -82,4 +82,8 @@ body {
   .studentProgress p {
     margin: 0;
   }
- 
+  .select1{
+    margin: inherit;
+    padding: inherit;
+    font-size: inherit;
+  }
