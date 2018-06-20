@@ -82,4 +82,6 @@ body {
   .studentProgress p {
     margin: 0;
   }
- 
+.select1{
+   display: none;
+ }

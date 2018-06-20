@@ -25,3 +25,14 @@ const toggle = (event) => {
 for (let i = 0; i < elements.length; i++) {
   elements[i].addEventListener('click', toggle);
 }
+
+const hola = document.getElementById('hola');
+
+hola.addEventListener('click', () => {
+  const x = document.getElementById('select_student');
+  if(x === "none"){
+    x.style.display = "block";
+  }else{
+    x.style.display = "none";
+  }
+})
