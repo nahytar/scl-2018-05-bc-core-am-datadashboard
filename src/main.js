@@ -26,11 +26,11 @@ for (let i = 0; i < elements.length; i++) {
   elements[i].addEventListener('click', toggle);
 }
 
-const cont_select = document.getElementById('conte_select');
+/*const cont_select = document.getElementById('conte_select');
 cont_select.addEventListener('click', => {
   if(select_alumna.style.display === 'none'){
     select_alumna.style.display = 'block';
   }else{
     select_alumna.style.display = 'none';
   }
-})
+})*/
