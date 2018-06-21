@@ -122,6 +122,7 @@ sites.forEach(site => {
 
     generationsDiv.append(yearDiv);
 
+    
    
 
   });
@@ -133,10 +134,10 @@ for (let i = 0; i < tags.length; i++) {
 }
 
 
-/* // objeto que se encarga de hacer los llamados al API
+/*// objeto que se encarga de hacer los llamados al API
 const idStudent = new XMLHttpRequest();
 // se define metodo y url para obtener los sites del API de manera sincrona
-idStudent.open('GET', 'https://api.laboratoria.la/cohorts/:id', false);
+idStudent.open('GET', 'https://api.laboratoria.la/cohorts/:id/users', false);
 // se hace llamado sin contenido en el body
 idStudent.send(null);
 if (idStudent.status === 200) {
@@ -145,11 +146,9 @@ if (idStudent.status === 200) {
     // para cada id recorre todos los cohort antes creados
     cohorts.forEach(cohort => {
       // si el id del cohort empieza con el nombre del site
-      if (idE.id.indexOf(site.name) === 0) {
-        // se agrega el año que esta en la fecha de inicio del cohort al conjunto de años de site
-        site.years.add(idE.start.substr(0, 4));
+      if (idE.id.indexOf(idE.name) === 0) {
+      
       }
     });
   });
-}
-*/
+}*/
