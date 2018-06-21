@@ -17,7 +17,6 @@ describe('data', () => {
   });
 
   describe('computeUsersStats(users, progress, courses)', () => {
-
     const cohort = fixtures.cohorts.find(item => item.id === 'lim-2018-03-pre-core-pw');
     const courses = Object.keys(cohort.coursesIndex);
     const { users, progress } = fixtures;
@@ -45,11 +44,11 @@ describe('data', () => {
         () => assert.equal(processed[0].stats.percent, 53)
       );
 
-      it('debería tener propiedad exercises con valor {total: 2, completed: 0, percent: 0}', () => {
+      it('debería tener propiedad exercises con valor {total: 2, completed: 1, percent: 50}', () => {
         assert.deepEqual(processed[0].stats.exercises, {
           total: 2,
-          completed: 0,
-          percent: 0,
+          completed: 1,
+          percent: 50,
         });
       });
 
@@ -59,6 +58,7 @@ describe('data', () => {
           completed: 2,
           percent: 67,
           scoreAvg: 29,
+          scoreSum: 57,
         });
       });
 
@@ -75,12 +75,40 @@ describe('data', () => {
   });
 
   describe('sortUsers(users, orderBy, orderDirection)', () => {
+    const cohort = fixtures.cohorts.find(item => item.id === 'lim-2018-03-pre-core-pw');
+    const courses = Object.keys(cohort.coursesIndex);
+    const { users, progress } = fixtures;
+    
+    it('debería retornar arreglo de usuarios ordenado por nombre ASC', () => {
+      const usersAsc = sortUsers(users, 'name', 'asc');
+      
+      assert.equal(usersAsc[1].name, 'Aide Reyna Huanacuni Pacho');
+      assert.equal(usersAsc[233].name, 'Fransheska Chavez');
+    });
+    it('debería retornar arreglo de usuarios ordenado por nombre DESC', () => {
+      const usersDesc = sortUsers(users, 'name', 'desc');
 
-    it('debería retornar arreglo de usuarios ordenado por nombre ASC');
-    it('debería retornar arreglo de usuarios ordenado por nombre DESC');
-    it('debería retornar arreglo de usuarios ordenado por porcentaje general ASC');
-    it('debería retornar arreglo de usuarios ordenado por porcentaje general DESC');
-    it('debería retornar arreglo de usuarios ordenado por ejercicios completados ASC');
+      assert.equal(usersDesc[0].name, 'Zurisadai Rosas Aramburú');
+      assert.equal(usersDesc[10].name, 'Yoanna');
+    });
+    it('debería retornar arreglo de usuarios ordenado por porcentaje general ASC', () => {
+      const processed = computeUsersStats(users, progress, courses);
+      const usersAsc = sortUsers(processed, 'percent', 'asc');
+
+      assert.equal(usersAsc[0].stats.percent, 0);
+      assert.equal(usersAsc[usersAsc.length - 1].stats.percent, 100);
+    });
+    it('debería retornar arreglo de usuarios ordenado por porcentaje general DESC', () => {
+      const processed = computeUsersStats(users, progress, courses);
+      const usersDesc = sortUsers(processed, 'percent', 'desc');
+
+      assert.equal(usersDesc[0].stats.percent, 100);
+      assert.equal(usersDesc[usersDesc.length - 1].stats.percent, 0);
+    });
+
+    it('debería retornar arreglo de usuarios ordenado por ejercicios completados ASC', () => {
+
+    });
     it('debería retornar arreglo de usuarios ordenado por ejercicios completados DESC');
     it('debería retornar arreglo de usuarios ordenado por quizzes completados ASC');
     it('debería retornar arreglo de usuarios ordenado por quizzes completados DESC');
@@ -88,7 +116,6 @@ describe('data', () => {
     it('debería retornar arreglo de usuarios ordenado por score promedio en quizzes completados DESC');
     it('debería retornar arreglo de usuarios ordenado por lecturas (reads) completadas ASC');
     it('debería retornar arreglo de usuarios ordenado por lecturas (reads) completadas DESC');
-
   });
 
   describe('filterUsers(users, filterBy)', () => {
