@@ -4,16 +4,16 @@
 <head>
   <meta charset="utf-8">
   <title>Data Dashboard</title>
-  <link rel="stylesheet" href="grid.css">
-  <link rel="stylesheet" href="font.css">
-  <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="mQueries.css">
+  <link rel="stylesheet" href="assets/css/grid.css">
+  <link rel="stylesheet" href="assets/css/font.css">
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="assets/css/mQueries.css">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 </head>
 
 <body>
   <div class="container">
-    <img src="img/logoLaboratoriaNegro.png" alt="logo Laboratoria" class="logoLaboratoria">
+    <img src="assets/img/logoLaboratoriaNegro.png" alt="logo Laboratoria" class="logoLaboratoria">
     <div class="sites whiteCard active" id="sites">
       <div class="site tag">
         <p class="icon-triangle-down">LIM</p>
@@ -23,13 +23,13 @@
             <div class="turns whiteCard">
               <div class="turn tag">
                 <p class="icon-triangle-down">Turno AM</p>
-                <div class="students whiteCard">
-                  <div class="student tag">
-                      <div class="select1" id="select_alumna">
-                          <select name="names" id="studentsName">
-                            <option value="listStudentsC();">Seleccionar alunma</option>
-                           </select>
-                        </div>
+                <div class="students whiteCard" id="hola">
+                  <div class="student element">
+                    <div class="select1" id="select_student">
+                      <select name="names" id="studentsName">
+                        <option value="listStudentsC();">Seleccionar alunma</option>
+                       </select>
+                    </div>
                     <div class="studentProgress" style="width: 60%;">
                       <p>Fanny</p>
                     </div>
@@ -700,8 +700,12 @@
 
     </div>
   </div>
+<<<<<<< HEAD
   <script src="main.js"></script>
   <script src="data.js"></script>
+=======
+  <script src="assets/js/main.js"></script>
+>>>>>>> c56add5abd5245154b1c4d82ef7be8d801fd37b4
 </body>
 
 </html>
