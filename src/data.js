@@ -21,8 +21,11 @@ window.computeUsersStats = (users, progress, courses) => {
             completed: 0
           },
         };
-
-window.sortUsers = (users, orderBy, orderDirection) => {
+      }
+    }
+  }
+}
+/*window.sortUsers = (users, orderBy, orderDirection) => {
 
 };
 
@@ -32,6 +35,6 @@ window.filterUsers = (users, search) => {
 
 window.processCohortData = (options, cohortData, users, progress, orderBy, sortUsers, orderDirection, search) => {
 
-};
+};*/
 
 
