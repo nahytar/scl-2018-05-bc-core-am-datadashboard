@@ -62,11 +62,22 @@ window.computeUsersStats = (users, progress, courses) => {
 };
 
 window.sortUsers = (users, orderBy, orderDirection) => {
-
+   /*let orderDirection = users =>{
+     return 
+   }
+*/
 };
 
 window.filterUsers = (users, search) => {
-
+ //guardando en una variable el nuevo arreglo 
+  let newArrUsers = [];
+//users pasa por un filtrado el cual
+  return users.filter(element =>{
+//si el search coincide con el nombre de usuario y este es >= a 0
+  return element.name.toLowerCase().indexOf(search.toLowerCase()) >= 0;
+  });
+//entonces nos entregara el nuevo array
+return newArrUsers;
 };
 
 window.processCohortData = (options, cohortData, users, progress, orderBy, sortUsers, orderDirection, search) => {
