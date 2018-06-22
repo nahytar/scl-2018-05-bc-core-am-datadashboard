@@ -54,6 +54,14 @@ window.computeUsersStats = (users, progress, courses) => {
         user.stats.quizzes.percent = Math.round(user.stats.quizzes.completed / user.stats.quizzes.total * 100);
         user.stats.quizzes.scoreAvg = Math.round(user.stats.quizzes.scoreSum / user.stats.quizzes.completed);
         user.stats.reads.percent = Math.round(user.stats.reads.completed / user.stats.reads.total * 100);
+      } else {
+        user.stats = {
+          percent: 0,
+          exercises: {},
+          quizzes: {},
+          reads: {},
+        };
+
       }
     });
   });
@@ -91,10 +99,17 @@ window.sortUsers = (users, orderBy, orderDirection) => {
 window.filterUsers = (users, search) => {
   //guardando en una variable el nuevo arreglo 
   let newArrUsers = [];
+<<<<<<< HEAD
   //users pasa por un filtrado al cual le paso cada elemento del arreglo que recorrera
   return users.filter(element => {
     //si el search coincide con el usuario y este es >= a 0
     return element.users.toLowerCase().indexOf(search.toLowerCase()) >= 0;
+=======
+  //users pasa por un filtrado el cual
+  return users.filter(element => {
+    //si el search coincide con el nombre de usuario y este es >= a 0
+    return element.name.toLowerCase().indexOf(search.toLowerCase()) >= 0;
+>>>>>>> 962fa43f5d203cd55d3ee8cb686d88cd0f098600
   });
   //entonces nos entregara el nuevo array
   return newArrUsers;
