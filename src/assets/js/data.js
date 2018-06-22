@@ -63,41 +63,41 @@ window.computeUsersStats = (users, progress, courses) => {
 
 window.sortUsers = (users, orderBy, orderDirection) => {
   switch (orderBy) {
-  case 'name':
-    return users.sort((a, b) => {
-      if (orderDirection === 'asc') {
-        return a.name.localeCompare(b.name);
-      } else {
-        return b.name.localeCompare(a.name);
-      }
-    });
-  case 'percent':
-    return users.sort((a, b) => {
-      if (a.stats && b.stats) {
-        if (orderDirection === 'asc' ) {
-          return a.stats.percent - b.stats.percent;
+    case 'name':
+      return users.sort((a, b) => {
+        if (orderDirection === 'asc') {
+          return a.name.localeCompare(b.name);
         } else {
-          return b.stats.percent - a.stats.percent;
+          return b.name.localeCompare(a.name);
         }
-      } else {
-        return -1;
-      }
-    });
-  default:
-    break;
+      });
+    case 'percent':
+      return users.sort((a, b) => {
+        if (a.stats && b.stats) {
+          if (orderDirection === 'asc') {
+            return a.stats.percent - b.stats.percent;
+          } else {
+            return b.stats.percent - a.stats.percent;
+          }
+        } else {
+          return -1;
+        }
+      });
+    default:
+      break;
   }
 };
 
 window.filterUsers = (users, search) => {
- //guardando en una variable el nuevo arreglo 
+  //guardando en una variable el nuevo arreglo 
   let newArrUsers = [];
-//users pasa por un filtrado el cual
-  return users.filter(element =>{
-//si el search coincide con el nombre de usuario y este es >= a 0
-  return element.name.toLowerCase().indexOf(search.toLowerCase()) >= 0;
+  //users pasa por un filtrado al cual le paso cada elemento del arreglo que recorrera
+  return users.filter(element => {
+    //si el search coincide con el usuario y este es >= a 0
+    return element.users.toLowerCase().indexOf(search.toLowerCase()) >= 0;
   });
-//entonces nos entregara el nuevo array
-return newArrUsers;
+  //entonces nos entregara el nuevo array
+  return newArrUsers;
 };
 
 window.processCohortData = (options, cohortData, users, progress, orderBy, sortUsers, orderDirection, search) => {

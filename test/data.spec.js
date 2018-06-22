@@ -78,10 +78,10 @@ describe('data', () => {
     const cohort = fixtures.cohorts.find(item => item.id === 'lim-2018-03-pre-core-pw');
     const courses = Object.keys(cohort.coursesIndex);
     const { users, progress } = fixtures;
-    
+
     it('debería retornar arreglo de usuarios ordenado por nombre ASC', () => {
       const usersAsc = sortUsers(users, 'name', 'asc');
-      
+
       assert.equal(usersAsc[1].name, 'Aide Reyna Huanacuni Pacho');
       assert.equal(usersAsc[233].name, 'Fransheska Chavez');
     });
@@ -107,9 +107,18 @@ describe('data', () => {
     });
 
     it('debería retornar arreglo de usuarios ordenado por ejercicios completados ASC', () => {
+      /*const processed = computeUsersStats(users, progress, courses);
+      const usersExersAsc = sortUsers(processed, 'exercises', 'asc');
 
+      assert.equal(usersExersAsc[0].stats.exercises, 0);
+      assert.equal(usersExersAsc[usersExersAsc.length - 1].stats.exercises, 100);*/
     });
     it('debería retornar arreglo de usuarios ordenado por ejercicios completados DESC');
+    /*const processed = computeUsersStats(users, progress, courses);
+    const usersExersAsc = sortUsers(processed, 'exercises', 'desc');*/
+
+    /*assert.equal(usersExersAsc[0].stats.exercises, 100);
+    assert.equal(usersExersAsc[usersExersAsc.length - 1].stats.exercises, 0);*/
     it('debería retornar arreglo de usuarios ordenado por quizzes completados ASC');
     it('debería retornar arreglo de usuarios ordenado por quizzes completados DESC');
     it('debería retornar arreglo de usuarios ordenado por score promedio en quizzes completados ASC');
@@ -119,7 +128,7 @@ describe('data', () => {
   });
 
   describe('filterUsers(users, filterBy)', () => {
-
+    assert.isFunction(computeUsersStats);
     it('debería retornar nuevo arreglo solo con usuarios con nombres que contengan string (case insensitive)');
 
   });

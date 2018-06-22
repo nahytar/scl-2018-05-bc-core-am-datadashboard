@@ -122,9 +122,6 @@ sites.forEach(site => {
 
     generationsDiv.append(yearDiv);
 
-    
-   
-
   });
 });
 
