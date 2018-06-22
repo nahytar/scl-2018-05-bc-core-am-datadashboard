@@ -40,6 +40,7 @@ let cohortsDiv;
 let cohortDiv;
 let cohortP;
 let cohortName;
+let idAlumnas;
 
 // limpia de contenido el div de sites para poder agregar los que se van a generar a partir del API
 sitesDiv.innerHTML = '';
@@ -159,6 +160,9 @@ sites.forEach(site => {
       cohortsDiv.append(cohortDiv);
     });
 
+    
+   
+
   });
 });
 
@@ -166,3 +170,23 @@ sites.forEach(site => {
 for (let i = 0; i < tags.length; i++) {
   tags[i].addEventListener('click', toggle);
 }
+
+
+/*// objeto que se encarga de hacer los llamados al API
+const idStudent = new XMLHttpRequest();
+// se define metodo y url para obtener los sites del API de manera sincrona
+idStudent.open('GET', 'https://api.laboratoria.la/cohorts/:id/users', false);
+// se hace llamado sin contenido en el body
+idStudent.send(null);
+if (idStudent.status === 200) {
+  // parsea json que viene como string dentro de responseText y recorre los cohorts
+  JSON.parse(idStudent.responseText).forEach(idE => {
+    // para cada id recorre todos los cohort antes creados
+    cohorts.forEach(cohort => {
+      // si el id del cohort empieza con el nombre del site
+      if (idE.id.indexOf(idE.name) === 0) {
+      
+      }
+    });
+  });
+}*/
