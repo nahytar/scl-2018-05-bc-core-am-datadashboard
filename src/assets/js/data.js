@@ -99,17 +99,10 @@ window.sortUsers = (users, orderBy, orderDirection) => {
 window.filterUsers = (users, search) => {
   //guardando en una variable el nuevo arreglo 
   let newArrUsers = [];
-<<<<<<< HEAD
   //users pasa por un filtrado al cual le paso cada elemento del arreglo que recorrera
-  return users.filter(element => {
+  return users.filter(cohort => {
     //si el search coincide con el usuario y este es >= a 0
-    return element.users.toLowerCase().indexOf(search.toLowerCase()) >= 0;
-=======
-  //users pasa por un filtrado el cual
-  return users.filter(element => {
-    //si el search coincide con el nombre de usuario y este es >= a 0
-    return element.name.toLowerCase().indexOf(search.toLowerCase()) >= 0;
->>>>>>> 962fa43f5d203cd55d3ee8cb686d88cd0f098600
+    return cohort.id.toLowerCase().indexOf(search.toLowerCase()) >= 0;
   });
   //entonces nos entregara el nuevo array
   return newArrUsers;

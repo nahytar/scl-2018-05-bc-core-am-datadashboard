@@ -103,6 +103,7 @@ if (req.status === 200) {
 req.open('GET', 'https://api.laboratoria.la/cohorts', false);
 req.send(null);
 if (req.status === 200) {
+  //split elimina el guion del id
   let splitedId;
   // parsea json que viene como string dentro de responseText y recorre los cohorts
   JSON.parse(req.responseText).forEach(cohort => {
