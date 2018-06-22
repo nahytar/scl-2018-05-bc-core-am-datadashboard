@@ -29,6 +29,38 @@ const toggle = (event) => {
   event.stopPropagation();
 };
 
+const loadUsers = (cohort, studentsDivId) => {
+  let studentP;
+  let studentDiv;
+  let progressDiv;
+  const studentsDiv = document.getElementById(studentsDivId);
+
+  req.open('GET', `https://api.laboratoria.la/cohorts/${cohort.id}/users`, false);
+  req.send(null);
+  // if (req.status === 200 || studentsDiv.children.length === 0) {
+  //   req.open('GET', `https://api.laboratoria.la/progress?cohortid=${cohort.id}`, false);
+  //   req.send(null);
+  //   if (req.status === 200) {
+  //     computeUsersStats((users, progress, courses))
+  //   }
+  JSON.parse(req.responseText).forEach((student) => {
+    studentP = document.createElement('p');
+    studentP.append(document.createTextNode(student.name));
+
+    progressDiv = document.createElement('div');
+    progressDiv.classList.add('studentProgress');
+    progressDiv.style.width = '60%';
+    progressDiv.append(studentP);
+
+    studentDiv = document.createElement('div');
+    studentDiv.classList.add('student', 'tag');
+    studentDiv.append(progressDiv);
+
+    studentsDiv.append(studentDiv);
+  });
+
+  console.log(studentsDiv);
+}
 const tags = document.getElementsByClassName('tag');
 const sitesDiv = document.getElementById('sites');
 let siteDiv;
@@ -40,6 +72,7 @@ let cohortsDiv;
 let cohortDiv;
 let cohortP;
 let cohortName;
+let studentsDiv;
 let idAlumnas;
 
 // limpia de contenido el div de sites para poder agregar los que se van a generar a partir del API
@@ -78,29 +111,6 @@ if (req.status === 200) {
     sites.forEach(site => {
       // si el id del cohort empieza con el nombre del site
       if (splitedId[0] === site.id) {
-        // se agrega el año que esta en la fecha de inicio del cohort al conjunto de años de site
-        if (site.generations[splitedId[1]]) {
-          site.generations[splitedId[1]].push(cohort);
-        } else {
-          site.generations[splitedId[1]] = [cohort];
-        }
-      }
-    });
-  });
-}
-
-// se define metodo y url para obtener los cohorts del API de manera sincrona
-req.open('GET', 'https://api.laboratoria.la/cohorts', false);
-req.send(null);
-if (req.status === 200) {
-  let splitedId;
-  // parsea json que viene como string dentro de responseText y recorre los cohorts
-  JSON.parse(req.responseText).forEach(cohort => {
-    splitedId = cohort.id.split('-');
-    // para cada cohort recorre todos los sites antes creados
-    sites.forEach(site => {
-      // si el id del cohort empieza con el nombre del site
-      if (splitedId[0] === site.name) {
         // se agrega el año que esta en la fecha de inicio del cohort al conjunto de años de site
         if (site.generations[splitedId[1]]) {
           site.generations[splitedId[1]].push(cohort);
@@ -157,12 +167,18 @@ sites.forEach(site => {
       cohortDiv.classList.add('turn', 'tag');
       cohortDiv.append(cohortP);
 
+      studentsDiv = document.createElement('div');
+      studentsDiv.classList.add('students', 'whiteCard');
+      studentsDiv.id = 'students-' + cohort.id;
+
+      cohortDiv.append(studentsDiv);
+
+      cohortDiv.addEventListener('click', () => {
+        loadUsers(cohort, 'students-' + cohort.id);
+      });
+
       cohortsDiv.append(cohortDiv);
     });
-
-    
-   
-
   });
 });
 
@@ -170,23 +186,3 @@ sites.forEach(site => {
 for (let i = 0; i < tags.length; i++) {
   tags[i].addEventListener('click', toggle);
 }
-
-
-/*// objeto que se encarga de hacer los llamados al API
-const idStudent = new XMLHttpRequest();
-// se define metodo y url para obtener los sites del API de manera sincrona
-idStudent.open('GET', 'https://api.laboratoria.la/cohorts/:id/users', false);
-// se hace llamado sin contenido en el body
-idStudent.send(null);
-if (idStudent.status === 200) {
-  // parsea json que viene como string dentro de responseText y recorre los cohorts
-  JSON.parse(idStudent.responseText).forEach(idE => {
-    // para cada id recorre todos los cohort antes creados
-    cohorts.forEach(cohort => {
-      // si el id del cohort empieza con el nombre del site
-      if (idE.id.indexOf(idE.name) === 0) {
-      
-      }
-    });
-  });
-}*/
