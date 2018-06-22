@@ -62,10 +62,30 @@ window.computeUsersStats = (users, progress, courses) => {
 };
 
 window.sortUsers = (users, orderBy, orderDirection) => {
-   /*let orderDirection = users =>{
-     return 
-   }
-*/
+  switch (orderBy) {
+  case 'name':
+    return users.sort((a, b) => {
+      if (orderDirection === 'asc') {
+        return a.name.localeCompare(b.name);
+      } else {
+        return b.name.localeCompare(a.name);
+      }
+    });
+  case 'percent':
+    return users.sort((a, b) => {
+      if (a.stats && b.stats) {
+        if (orderDirection === 'asc' ) {
+          return a.stats.percent - b.stats.percent;
+        } else {
+          return b.stats.percent - a.stats.percent;
+        }
+      } else {
+        return -1;
+      }
+    });
+  default:
+    break;
+  }
 };
 
 window.filterUsers = (users, search) => {

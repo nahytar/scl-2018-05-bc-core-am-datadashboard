@@ -5,5 +5,5 @@ global.fixtures = {
   progress: require('../data/cohorts/lim-2018-03-pre-core-pw/progress.json'),
   users: require('../data/cohorts/lim-2018-03-pre-core-pw/users.json'),
 };
-require('../src/data');
+require('../src/assets/js/data');
 require('./data.spec.js');
