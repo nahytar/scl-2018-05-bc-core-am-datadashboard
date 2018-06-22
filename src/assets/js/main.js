@@ -29,20 +29,18 @@ const toggle = (event) => {
   event.stopPropagation();
 };
 
-const hola = document.getElementById('hola');
-
-hola.addEventListener('click', () => {
-  const x = document.getElementById('select_student');
-  if (x === 'none') {
-    x.style.display = 'block';
-  } else {
-    x.style.display = 'none';
-  }
-});
-
 const tags = document.getElementsByClassName('tag');
-
 const sitesDiv = document.getElementById('sites');
+let siteDiv;
+let siteP;
+let generationsDiv;
+let generationDiv;
+let generationP;
+let cohortsDiv;
+let cohortDiv;
+let cohortP;
+let cohortName;
+
 // limpia de contenido el div de sites para poder agregar los que se van a generar a partir del API
 sitesDiv.innerHTML = '';
 
@@ -52,12 +50,6 @@ const req = new XMLHttpRequest();
 req.open('GET', 'https://api.laboratoria.la/campuses', false);
 // se hace llamado sin contenido en el body
 req.send(null);
-
-let siteDiv;
-let siteP;
-let generationsDiv;
-let yearDiv;
-let yearP;
 // se instancia un array vacio para poder ir acumulando los sites
 const sites = [];
 // si el API respondio de manera correcta
@@ -66,11 +58,9 @@ if (req.status === 200) {
   JSON.parse(req.responseText).forEach(site => {
     // si el site esta activo
     if (site.active) {
+      site.generations = [];
       // agrega un objeto al array de site con el nombre y un conjunto donde se iran agegando las generaciones
-      sites.push({
-        name: site.id,
-        years: new Set()
-      });
+      sites.push(site);
     }
   });
 }
@@ -79,18 +69,48 @@ if (req.status === 200) {
 req.open('GET', 'https://api.laboratoria.la/cohorts', false);
 req.send(null);
 if (req.status === 200) {
+  let splitedId;
   // parsea json que viene como string dentro de responseText y recorre los cohorts
   JSON.parse(req.responseText).forEach(cohort => {
+    splitedId = cohort.id.split('-');
     // para cada cohort recorre todos los sites antes creados
     sites.forEach(site => {
       // si el id del cohort empieza con el nombre del site
-      if (cohort.id.indexOf(site.name) === 0) {
+      if (splitedId[0] === site.id) {
         // se agrega el año que esta en la fecha de inicio del cohort al conjunto de años de site
-        site.years.add(cohort.start.substr(0, 4));
+        if (site.generations[splitedId[1]]) {
+          site.generations[splitedId[1]].push(cohort);
+        } else {
+          site.generations[splitedId[1]] = [cohort];
+        }
       }
     });
   });
 }
+
+// se define metodo y url para obtener los cohorts del API de manera sincrona
+req.open('GET', 'https://api.laboratoria.la/cohorts', false);
+req.send(null);
+if (req.status === 200) {
+  let splitedId;
+  // parsea json que viene como string dentro de responseText y recorre los cohorts
+  JSON.parse(req.responseText).forEach(cohort => {
+    splitedId = cohort.id.split('-');
+    // para cada cohort recorre todos los sites antes creados
+    sites.forEach(site => {
+      // si el id del cohort empieza con el nombre del site
+      if (splitedId[0] === site.name) {
+        // se agrega el año que esta en la fecha de inicio del cohort al conjunto de años de site
+        if (site.generations[splitedId[1]]) {
+          site.generations[splitedId[1]].push(cohort);
+        } else {
+          site.generations[splitedId[1]] = [cohort];
+        }
+      }
+    });
+  });
+}
+
 // se recorre los sites
 sites.forEach(site => {
   // se le asigna a siteP un nuevo elemento HTML del tipo parrafo
@@ -110,16 +130,34 @@ sites.forEach(site => {
   siteDiv.append(generationsDiv);
   sitesDiv.append(siteDiv);
 
-  site.years.forEach(year => {
-    yearP = document.createElement('p');
-    yearP.classList.add('icon-triangle-down');
-    yearP.append(document.createTextNode(year));
+  site.generations.forEach((generation, year) => {
+    generationP = document.createElement('p');
+    generationP.classList.add('icon-triangle-down');
+    generationP.append(document.createTextNode(year));
 
-    yearDiv = document.createElement('div');
-    yearDiv.classList.add('generation', 'tag');
-    yearDiv.append(yearP);
+    generationDiv = document.createElement('div');
+    generationDiv.classList.add('generation', 'tag');
+    generationDiv.append(generationP);
 
-    generationsDiv.append(yearDiv);
+    cohortsDiv = document.createElement('div');
+    cohortsDiv.classList.add('turns', 'whiteCard');
+
+    generationDiv.append(cohortsDiv);
+
+    generationsDiv.append(generationDiv);
+
+    generation.forEach((cohort) => {
+      cohortP = document.createElement('p');
+      cohortP.classList.add('icon-triangle-down');
+      cohortName = cohort.id.split('-').slice(4).join(' ');
+      cohortP.append(document.createTextNode(cohortName));
+
+      cohortDiv = document.createElement('div');
+      cohortDiv.classList.add('turn', 'tag');
+      cohortDiv.append(cohortP);
+
+      cohortsDiv.append(cohortDiv);
+    });
 
   });
 });
