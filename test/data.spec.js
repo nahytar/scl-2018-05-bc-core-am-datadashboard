@@ -107,11 +107,11 @@ describe('data', () => {
     });
 
     it('debería retornar arreglo de usuarios ordenado por ejercicios completados ASC', () => {
-      /*const processed = computeUsersStats(users, progress, courses);
+      const processed = computeUsersStats(users, progress, courses);
       const usersExersAsc = sortUsers(processed, 'exercises', 'asc');
 
       assert.equal(usersExersAsc[0].stats.exercises, 0);
-      assert.equal(usersExersAsc[usersExersAsc.length - 1].stats.exercises, 100);*/
+      assert.equal(usersExersAsc[usersExersAsc.length - 1].stats.exercises, 100);
     });
     it('debería retornar arreglo de usuarios ordenado por ejercicios completados DESC');
     /*const processed = computeUsersStats(users, progress, courses);

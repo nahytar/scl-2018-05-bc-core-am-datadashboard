@@ -1,25 +1,29 @@
 window.computeUsersStats = (users, progress, courses) => {
+  let stats;
   users.forEach(user => {
+    // Se crea el atributo stats en el user y se le asigna un objeto con las estadisticas
+    stats = {
+      percent: 0,
+      total: 0,
+      exercises: {
+        total: 0,
+        completed: 0
+      },
+      quizzes: {
+        total: 0,
+        completed: 0,
+        scoreSum: 0
+      },
+      reads: {
+        total: 0,
+        completed: 0
+      },
+    };
     courses.forEach(course => {
       // Si la usuaria tiene progresos en el curso
-      if (progress[user.id][course]) {
-        // Se crea el atributo stats en el user y se le asigna un objeto con las estadisticas
-        user.stats = {
-          percent: progress[user.id][course].percent,
-          exercises: {
-            total: 0,
-            completed: 0
-          },
-          quizzes: {
-            total: 0,
-            completed: 0,
-            scoreSum: 0
-          },
-          reads: {
-            total: 0,
-            completed: 0
-          },
-        };
+      if (progress[user.id] && progress[user.id][course]) {
+        stats.percent += progress[user.id][course].percent;
+        stats.total++;
 
         // Se obtiene el arreglo de los valores de units (la lista de unidades) y lo recorre
         Object.values(progress[user.id][course].units).forEach(unit => {
@@ -28,42 +32,55 @@ window.computeUsersStats = (users, progress, courses) => {
             // Si la parte es una practice
             if (part.type === 'practice') {
               // Suma uno al total
-              user.stats.exercises.total++;
+              stats.exercises.total++;
               // Como completed es un entero que vale 0 o 1, simplemente lo acumula
-              user.stats.exercises.completed += part.completed;
+              stats.exercises.completed += part.completed ? parent.completed : 0;
             }
             // Si la parte es una quiz
             if (part.type === 'quiz') {
-              user.stats.quizzes.total++;
-              user.stats.quizzes.completed += part.completed;
+              stats.quizzes.total++;
+              stats.quizzes.completed += part.completed ? part.completed : 0;
               // Si el quiz fue completado se acumula su puntuacion
               if (part.completed) {
-                user.stats.quizzes.scoreSum += part.score;
+                stats.quizzes.scoreSum += part.score ? part.score : 0;
               }
             }
             // Si la parte es un read
             if (part.type === 'read') {
-              user.stats.reads.total++;
-              user.stats.reads.completed += part.completed;
+              stats.reads.total++;
+              stats.reads.completed += part.completed ? parent.completed : 0;
             }
           });
         });
 
         // Se calculan los promedios basados en los totales y acumuladores
-        user.stats.exercises.percent = Math.round(user.stats.exercises.completed / user.stats.exercises.total * 100);
-        user.stats.quizzes.percent = Math.round(user.stats.quizzes.completed / user.stats.quizzes.total * 100);
-        user.stats.quizzes.scoreAvg = Math.round(user.stats.quizzes.scoreSum / user.stats.quizzes.completed);
-        user.stats.reads.percent = Math.round(user.stats.reads.completed / user.stats.reads.total * 100);
-      } else {
-        user.stats = {
-          percent: 0,
-          exercises: {},
-          quizzes: {},
-          reads: {},
-        };
-
+        if (stats.exercises.total > 0) {
+          stats.exercises.percent = Math.round(stats.exercises.completed / stats.exercises.total * 100);
+        } else {
+          stats.exercises.percent = 0;
+        }
+        if (stats.quizzes.total > 0) {
+          stats.quizzes.percent = Math.round(stats.quizzes.completed / stats.quizzes.total * 100);
+        } else {
+          stats.quizzes.percent = 0;
+        }
+        if (stats.quizzes.completed > 0) {
+          stats.quizzes.scoreAvg = Math.round(stats.quizzes.scoreSum / stats.quizzes.completed);
+        } else {
+          stats.quizzes.scoreAvg = 0;
+        }
+        if (stats.reads.total > 0) {
+          stats.reads.percent = Math.round(stats.reads.completed / stats.reads.total * 100);
+        } else {
+          stats.reads.percent = 0;
+        }
       }
     });
+    if (stats.total > 0) {
+      stats.percent = Math.round(stats.percent / stats.total);
+    }
+
+    user.stats = stats;
   });
 
   return users;
