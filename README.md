@@ -2,7 +2,24 @@
 
 # Introducción
 
-La interfaz esta detinada para uso de la Training Managers (TMs) de Laboratoria.
+Data Dashboard es una interfaz que esta destinada para uso de la Training Managers (TMs) de Laboratoria. Esta interfaz permitirá facilitar el trabajo, que la data de información sea más amigable al poder visualizarse y permitirá que la toma de decisiones sea más ágil para la usuaria. 
+Para la interfaz debemos implementar en su construcción:
+1.	Que el usuario tenga la opción de seleccionar un cohort de una lista de cohorts.
+2.	Al seleccionar un cohort:
+      *Listar las alumnas de ese cohort
+      *Para cada alumna:
+    2.1 Calcular porcentaje de completitud de todos los cursos.
+    2.2 Calcular grado de completitud de lecturas, ejercicios autocorregidos, y quizzes.
+    2.3 Ordenar alumnas por completitud general (porcentaje consumido/completado de todos los cursos del cohort en cuestión), de lecturas, ejercicios autocorregidos y quizzes.
+    2.4 Filtrar/buscar alumnas por nombre.
+3.	Visualizarse sin problemas desde distintos tamaños de pantallas: móviles, tablets y desktops.
+4.	Incluir pruebas unitarias.
+
+#Planificacion del proyecto:
+
+Ingresar a :
+https://trello.com/b/5HAZLjUE/proyecto-2 
+
 
 # Entrevista 
 
