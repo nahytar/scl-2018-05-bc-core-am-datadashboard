@@ -1,0 +1,137 @@
+body {
+  background-color: #FFE521;
+}
+
+.container {
+  width: 100%;
+  margin-top: 15px;
+}
+
+.logoLaboratoria {
+  margin-left: 10px;
+}
+/* Los div con clase tag tomen el valor de la propiedad de su elemento padre*/
+.tag {
+  margin: inherit;
+  padding: inherit;
+  display: inherit;
+  max-height: inherit;
+}
+/*El div con class active y los que posean class tag y estan dentro de active tomen display block*/
+.active .tag {
+  display: block;
+}
+
+.tag p {
+  margin: inherit;
+  padding: inherit;
+  max-height: inherit;
+  font-size: inherit;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: bold;
+}
+/* Este class en una transición de 5s tomara estas popiedades esto hara que se escondan*/
+.whiteCard {
+  background-color: white;
+  max-height: 0;
+  margin: 0;
+  padding: 0;
+  font-size: 0;
+  transition: 0.5s ease-out;
+}
+
+.active {
+  max-height: 10000px;
+  padding: 10px;
+  margin: 10px;
+  font-size: 30px;
+}
+
+.site {
+  background-color: #56F89A;
+}
+
+.site:hover {
+  background-color: rgba(135, 238, 178, 0.993)
+}
+
+.generation {
+  background-color: #FFE521;
+}
+
+.generation:hover {
+  background-color: rgb(241, 226, 109);
+}
+
+.turn {
+  background-color: #56F89A;
+}
+
+.turn:hover {
+  background-color: rgba(135, 238, 178, 0.993);
+}
+
+.student {
+  padding: 0;
+  margin: inherit;
+  max-height: inherit;
+}
+
+.studentProgress {
+  background-color: #FF009E;
+  margin: 0;
+  padding: inherit;
+  max-height: inherit;
+  overflow: visible;
+  min-height: 0px;
+  height: 40px;
+  margin-top: -40px;
+}
+
+.student p {
+  margin: 0;
+}
+
+.dateStudent {
+  background-color: rgb(255, 0, 157);
+  margin: 0;
+  padding: inherit;
+  max-height: inherit;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+#myInput {
+  background-image: url('/css/searchicon.png');
+  background-position: 10px 12px;
+  background-repeat: no-repeat;
+  width: 100%;
+  font-size: 16px;
+  padding: 12px 20px 12px 40px;
+  border: 1px solid #ddd;
+  margin-bottom: 12px;
+}
+
+#myUL {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+#myUL li a {
+  border: 1px solid #ddd;
+  margin-top: -1px;
+  /* Prevent double borders */
+  background-color: #f6f6f6;
+  padding: 12px;
+  text-decoration: none;
+  font-size: 18px;
+  color: black;
+  display: block
+}
+
+#myUL li a:hover:not(.header) {
+  background-color: #eee;
+}
