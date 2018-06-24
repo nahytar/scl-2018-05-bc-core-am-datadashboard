@@ -31,6 +31,16 @@ body {
   font-weight: bold;
 }
 
+.tag input {
+  margin: inherit;
+  padding: inherit;
+  max-height: inherit;
+  font-size: inherit;
+  border: 0;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: bold;
+}
+
 .whiteCard {
   background-color: white;
   max-height: 0;
