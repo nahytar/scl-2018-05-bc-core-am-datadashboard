@@ -15,7 +15,7 @@ Para la interfaz debemos implementar en su construcción:
 3.	Visualizarse sin problemas desde distintos tamaños de pantallas: móviles, tablets y desktops.
 4.	Incluir pruebas unitarias.
 
-#Planificacion del proyecto:
+# Planificacion del proyecto:
 
 Ingresar a :
 https://trello.com/b/5HAZLjUE/proyecto-2 
@@ -79,10 +79,10 @@ Las funciones más necesarias son:
 Y los colores utilizados para la aplicación son los que representan a la marca actualmente (amarillo fuerte, menta y fucsia.
 
 ## Problemática observada:  
-falta de mayores opciones de funcionalidad en LMS la cual facilite el trabajo de la usuaria.
+Falta de mayores opciones de funcionalidad en LMS la cual facilite el trabajo de la usuaria.
 
 ## Modelo de solución: 
-creación de una nueva funcionalidad en el LMS, aplicación Datadashboard, la cual contemple las siguientes características:
+Creación de una nueva funcionalidad en el LMS, aplicación Datadashboard, la cual contemple las siguientes características:
 1. Opción que nos entregue el grado de completitud de las diferentes evaluaciones de las alumnas.
 2. Opción para ver los resultados
 3. Y opción que nos permita realizar un ranking con los resultados.
