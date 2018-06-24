@@ -107,6 +107,7 @@ if (req.status === 200) {
   let splitedId;
   // parsea json que viene como string dentro de responseText y recorre los cohorts
   JSON.parse(req.responseText).forEach(cohort => {
+    //cohort.id queda con espacio
     splitedId = cohort.id.split('-');
     // para cada cohort recorre todos los sites antes creados
     sites.forEach(site => {
@@ -187,3 +188,4 @@ sites.forEach(site => {
 for (let i = 0; i < tags.length; i++) {
   tags[i].addEventListener('click', toggle);
 }
+
