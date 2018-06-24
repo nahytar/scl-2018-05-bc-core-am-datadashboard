@@ -29,38 +29,47 @@ const toggle = (event) => {
   event.stopPropagation();
 };
 
+const getData = (url) => {
+  req.open('GET', url, false);
+  req.send(null);
+  if (req.status === 200) {
+    return JSON.parse(req.responseText);
+  }
+
+  return [];
+};
+
 const loadUsers = (cohort, studentsDivId) => {
   let studentP;
   let studentDiv;
   let progressDiv;
   const studentsDiv = document.getElementById(studentsDivId);
+  
+  if (studentsDiv.children.length === 0) {
+    let users = getData(`https://api.laboratoria.la/cohorts/${cohort.id}/users`);
+    let progress = getData(`https://api.laboratoria.la/cohorts/${cohort.id}/progress`);
+    
+    users = computeUsersStats(users, progress, Object.keys(cohort.coursesIndex));
+    users.forEach((student) => {
+      if (student.role === 'student') {
+        studentP = document.createElement('p');
+        studentP.append(document.createTextNode(student.name + ' ' + student.stats.percent + '%'));
+    
+        progressDiv = document.createElement('div');
+        progressDiv.classList.add('studentProgress');
+        progressDiv.style.width = student.stats.percent + '%';
+        
+        studentDiv = document.createElement('div');
+        studentDiv.classList.add('student', 'tag');
+        studentDiv.append(studentP);
+        studentDiv.append(progressDiv);
+    
+        studentsDiv.append(studentDiv);        
+      }
+    });
+  }
+};
 
-  req.open('GET', `https://api.laboratoria.la/cohorts/${cohort.id}/users`, false);
-  req.send(null);
-  // if (req.status === 200 || studentsDiv.children.length === 0) {
-  //   req.open('GET', `https://api.laboratoria.la/progress?cohortid=${cohort.id}`, false);
-  //   req.send(null);
-  //   if (req.status === 200) {
-  //     computeUsersStats((users, progress, courses))
-  //   }
-  JSON.parse(req.responseText).forEach((student) => {
-    studentP = document.createElement('p');
-    studentP.append(document.createTextNode(student.name));
-
-    progressDiv = document.createElement('div');
-    progressDiv.classList.add('studentProgress');
-    progressDiv.style.width = '60%';
-    progressDiv.append(studentP);
-
-    studentDiv = document.createElement('div');
-    studentDiv.classList.add('student', 'tag');
-    studentDiv.append(progressDiv);
-
-    studentsDiv.append(studentDiv);
-  });
-
-  console.log(studentsDiv);
-}
 const tags = document.getElementsByClassName('tag');
 const sitesDiv = document.getElementById('sites');
 let siteDiv;
@@ -74,9 +83,6 @@ let cohortP;
 let cohortName;
 let studentsDiv;
 let idAlumnas;
-
-// limpia de contenido el div de sites para poder agregar los que se van a generar a partir del API
-sitesDiv.innerHTML = '';
 
 // objeto que se encarga de hacer los llamados al API
 const req = new XMLHttpRequest();
@@ -92,6 +98,7 @@ if (req.status === 200) {
   JSON.parse(req.responseText).forEach(site => {
     // si el site esta activo
     if (site.active) {
+      // se crea un array vacio de generaciones para ir acumulandolos
       site.generations = [];
       // agrega un objeto al array de site con el nombre y un conjunto donde se iran agegando las generaciones
       sites.push(site);
@@ -104,19 +111,21 @@ req.open('GET', 'https://api.laboratoria.la/cohorts', false);
 req.send(null);
 if (req.status === 200) {
   //split elimina el guion del id
-  let splitedId;
+  let siteId;
+  let year;
   // parsea json que viene como string dentro de responseText y recorre los cohorts
   JSON.parse(req.responseText).forEach(cohort => {
-    splitedId = cohort.id.split('-');
+    siteId = cohort.id.split('-')[0];
+    year = cohort.id.split('-')[1];
     // para cada cohort recorre todos los sites antes creados
     sites.forEach(site => {
       // si el id del cohort empieza con el nombre del site
-      if (splitedId[0] === site.id) {
-        // se agrega el año que esta en la fecha de inicio del cohort al conjunto de años de site
-        if (site.generations[splitedId[1]]) {
-          site.generations[splitedId[1]].push(cohort);
+      if (siteId === site.id) {
+        // se agrega el año que viene en el id del cohort a la generacion
+        if (site.generations[year]) {
+          site.generations[year].push(cohort);
         } else {
-          site.generations[splitedId[1]] = [cohort];
+          site.generations[year] = [cohort];
         }
       }
     });
