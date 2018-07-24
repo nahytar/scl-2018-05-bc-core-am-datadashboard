@@ -39,11 +39,11 @@ const getData = (url) => {
   return [];
 };
 
-const loadUsers = (cohort, studentsDivId) => {
+const loadUsers = (cohort) => {
   let studentP;
   let studentDiv;
   let progressDiv;
-  const studentsDiv = document.getElementById(studentsDivId);
+  const studentsDiv = document.getElementById('students-' + cohort.id);
   const filter = document.getElementById('input-' + cohort.id).value.toUpperCase();
 
   let fc = studentsDiv.getElementsByClassName('student').item(0);
@@ -52,7 +52,7 @@ const loadUsers = (cohort, studentsDivId) => {
     studentsDiv.removeChild(fc);
     fc = studentsDiv.getElementsByClassName('student').item(0);
   }
-  
+
   // si cohort no tiene users
   if (!cohort.users) {
     // busca las usuarias desde el API
@@ -62,25 +62,25 @@ const loadUsers = (cohort, studentsDivId) => {
     // une los progresos con sus respectivas usuarias a traves del metodo declarado en data.js
     cohort.users = computeUsersStats(cohort.users, progress, Object.keys(cohort.coursesIndex));
   }
-  
-  cohort.users.forEach((student) => {
-    if (student.role === 'student' && student.name.toUpperCase().indexOf(filter) >= 0) {
-      studentP = document.createElement('p');
-      studentP.append(document.createTextNode(student.name + ' ' + student.stats.percent + '%'));
-  
-      progressDiv = document.createElement('div');
-      progressDiv.classList.add('studentProgress');
-      progressDiv.style.width = student.stats.percent + '%';
-      
-      studentDiv = document.createElement('div');
-      studentDiv.classList.add('student', 'tag');
-      studentDiv.append(studentP);
-      studentDiv.append(progressDiv);
-  
-      studentsDiv.append(studentDiv);        
-    }
+
+  filterUsers(cohort.users, filter).forEach((student) => {
+    studentP = document.createElement('p');
+    studentP.append(document.createTextNode(student.name + ' ' + student.stats.percent + '%'));
+
+    progressDiv = document.createElement('div');
+    progressDiv.classList.add('studentProgress');
+    progressDiv.style.width = student.stats.percent + '%';
+
+    studentDiv = document.createElement('div');
+    studentDiv.classList.add('student', 'tag');
+    studentDiv.append(studentP);
+    studentDiv.append(progressDiv);
+
+    studentsDiv.append(studentDiv);
   });
 };
+
+// const drawUsers = 
 
 // ========================================================
 // se obtiene los tags desde el HTML
@@ -216,11 +216,11 @@ sites.forEach(site => {
       });
       // al hacer click en el cohort ademas de desplegar las students se carga las mismas desde el API
       cohortDiv.addEventListener('click', () => {
-        loadUsers(cohort, 'students-' + cohort.id);
+        loadUsers(cohort);
       });
       // al escribir en el filtro se llama a loadUsers
       studentsFilter.addEventListener('keyup', () => {
-        loadUsers(cohort, 'students-' + cohort.id);
+        loadUsers(cohort);
       });
       // se agrega el cohort a la lista de cohort
       cohortsDiv.append(cohortDiv);

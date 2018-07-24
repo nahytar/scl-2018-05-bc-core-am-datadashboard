@@ -1,5 +1,4 @@
 describe('data', () => {
-
   it('debería exponer función computeUsersStats en objeto global', () => {
     assert.isFunction(computeUsersStats);
   });
@@ -110,16 +109,23 @@ describe('data', () => {
       const processed = computeUsersStats(users, progress, courses);
       const usersExersAsc = sortUsers(processed, 'exercises', 'asc');
 
-      assert.equal(usersExersAsc[0].stats.exercises, 0);
-      assert.equal(usersExersAsc[usersExersAsc.length - 1].stats.exercises, 100);
+      assert.equal(usersExersAsc[0].stats.exercises.percent, 0);
+      assert.equal(usersExersAsc[usersExersAsc.length - 1].stats.exercises.percent, 100);
     });
-    it('debería retornar arreglo de usuarios ordenado por ejercicios completados DESC');
-    /*const processed = computeUsersStats(users, progress, courses);
-    const usersExersAsc = sortUsers(processed, 'exercises', 'desc');*/
+    it('debería retornar arreglo de usuarios ordenado por ejercicios completados DESC', () => {
+      const processed = computeUsersStats(users, progress, courses);
+      const usersExersDesc = sortUsers(processed, 'exercises', 'desc');
 
-    /*assert.equal(usersExersAsc[0].stats.exercises, 100);
-    assert.equal(usersExersAsc[usersExersAsc.length - 1].stats.exercises, 0);*/
-    it('debería retornar arreglo de usuarios ordenado por quizzes completados ASC');
+      assert.equal(usersExersDesc[0].stats.exercises.percent, 100);
+      assert.equal(usersExersDesc[usersExersDesc.length - 1].stats.exercises.percent, 0);
+    });
+    it('debería retornar arreglo de usuarios ordenado por quizzes completados ASC', () => {
+      const processed = computeUsersStats(users, progress, courses);
+      const userQuizzAsc = sortUsers(processed, 'quizzes', 'asc');
+
+      assert.equal(userQuizzAsc[0].stats.quizzes.percent, 0);
+      assert.equal(userQuizzAsc[userQuizzAsc.length - 1].stats.quizzes, 100);
+    });
     it('debería retornar arreglo de usuarios ordenado por quizzes completados DESC');
     it('debería retornar arreglo de usuarios ordenado por score promedio en quizzes completados ASC');
     it('debería retornar arreglo de usuarios ordenado por score promedio en quizzes completados DESC');
@@ -128,15 +134,26 @@ describe('data', () => {
   });
 
   describe('filterUsers(users, filterBy)', () => {
-    assert.isFunction(computeUsersStats);
-    it('debería retornar nuevo arreglo solo con usuarios con nombres que contengan string (case insensitive)');
+    const { users } = fixtures;
+    it('deberia ser una funcion', () => {
+      assert.isFunction(filterUsers);
+    });
 
+    it('debería retornar nuevo arreglo solo con usuarios con nombres que contengan string (case insensitive)', () => {
+      const processed = filterUsers(users, 'Mayra');
+
+      assert.equal(processed.length, 3);
+    });
+
+    it('debería retornar nuevo arreglo sin usuarios', () => {
+      const processed = filterUsers(users, 'nombre imposible');
+
+      assert.equal(processed.length, 0);
+    });
   });
 
   describe('processCohortData({ cohortData, orderBy, orderDirection, filterBy })', () => {
-
     it('debería retornar arreglo de usuarios con propiedad stats y aplicar sort y filter');
-
   });
 
 });
