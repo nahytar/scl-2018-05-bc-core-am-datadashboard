@@ -104,7 +104,6 @@ describe('data', () => {
       assert.equal(usersDesc[0].stats.percent, 100);
       assert.equal(usersDesc[usersDesc.length - 1].stats.percent, 0);
     });
-
     it('debería retornar arreglo de usuarios ordenado por ejercicios completados ASC', () => {
       const processed = computeUsersStats(users, progress, courses);
       const usersExersAsc = sortUsers(processed, 'exercises', 'asc');
@@ -124,13 +123,43 @@ describe('data', () => {
       const userQuizzAsc = sortUsers(processed, 'quizzes', 'asc');
 
       assert.equal(userQuizzAsc[0].stats.quizzes.percent, 0);
-      assert.equal(userQuizzAsc[userQuizzAsc.length - 1].stats.quizzes, 100);
+      assert.equal(userQuizzAsc[userQuizzAsc.length - 1].stats.quizzes.percent, 100);
     });
-    it('debería retornar arreglo de usuarios ordenado por quizzes completados DESC');
-    it('debería retornar arreglo de usuarios ordenado por score promedio en quizzes completados ASC');
-    it('debería retornar arreglo de usuarios ordenado por score promedio en quizzes completados DESC');
-    it('debería retornar arreglo de usuarios ordenado por lecturas (reads) completadas ASC');
-    it('debería retornar arreglo de usuarios ordenado por lecturas (reads) completadas DESC');
+    it('debería retornar arreglo de usuarios ordenado por quizzes completados DESC', () => {
+      const processed = computeUsersStats(users, progress, courses);
+      const userQuizzDesc = sortUsers(processed, 'quizzes', 'desc');
+
+      assert.equal(userQuizzDesc[0].stats.quizzes.percent, 100);
+      assert.equal(userQuizzDesc[userQuizzDesc.length - 1].stats.quizzes.percent, 0);
+    });
+    it('debería retornar arreglo de usuarios ordenado por score promedio en quizzes completados ASC', () => {
+      const processed = computeUsersStats(users, progress, courses);
+      const userQuizzAvgAsc = sortUsers(processed, 'quizzesAvg', 'asc');
+
+      assert.equal(userQuizzAvgAsc[0].stats.quizzes.scoreAvg, 0);
+      assert.equal(userQuizzAvgAsc[userQuizzAvgAsc.length - 1].stats.quizzes.scoreAvg, 100);
+    });
+    it('debería retornar arreglo de usuarios ordenado por score promedio en quizzes completados DESC', () => {
+      const processed = computeUsersStats(users, progress, courses);
+      const userQuizzAvgDesc = sortUsers(processed, 'quizzesAvg', 'desc');
+
+      assert.equal(userQuizzAvgDesc[0].stats.quizzes.scoreAvg, 100);
+      assert.equal(userQuizzAvgDesc[userQuizzAvgDesc.length - 1].stats.quizzes.scoreAvg, 0);
+    });
+    it('debería retornar arreglo de usuarios ordenado por lecturas (reads) completadas ASC', () => {
+      const processed = computeUsersStats(users, progress, courses);
+      const usersReadsAsc = sortUsers(processed, 'reads', 'asc');
+
+      assert.equal(usersReadsAsc[0].stats.reads.percent, 0);
+      assert.equal(usersReadsAsc[usersReadsAsc.length - 1].stats.reads.percent, 100);
+    });
+    it('debería retornar arreglo de usuarios ordenado por lecturas (reads) completadas DESC', () => {
+      const processed = computeUsersStats(users, progress, courses);
+      const usersReadsDesc = sortUsers(processed, 'reads', 'desc');
+
+      assert.equal(usersReadsDesc[0].stats.reads.percent, 100);
+      assert.equal(usersReadsDesc[usersReadsDesc.length - 1].stats.reads.percent, 0);
+    });
   });
 
   describe('filterUsers(users, filterBy)', () => {

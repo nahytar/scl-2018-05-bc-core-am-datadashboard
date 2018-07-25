@@ -118,7 +118,7 @@ window.sortUsers = (users, orderBy, orderDirection) => {
         return -1;
       }
     });
-    case 'quizzes':
+  case 'quizzes':
     return users.sort((a, b) => {
       if (a.stats && b.stats) {
         if (orderDirection === 'asc') {
@@ -130,8 +130,32 @@ window.sortUsers = (users, orderBy, orderDirection) => {
         return -1;
       }
     });
+  case 'quizzesAvg':
+    return users.sort((a, b) => {
+      if (a.stats && b.stats) {
+        if (orderDirection === 'asc') {
+          return a.stats.quizzes.scoreAvg - b.stats.quizzes.scoreAvg;
+        } else {
+          return b.stats.quizzes.scoreAvg - a.stats.quizzes.scoreAvg;
+        }
+      } else {
+        return -1;
+      }
+    });
+  case 'reads':
+    return users.sort((a, b) => {
+      if (a.stats && b.stats) {
+        if (orderDirection === 'asc') {
+          return a.stats.reads.percent - b.stats.reads.percent;
+        } else {
+          return b.stats.reads.percent - a.stats.reads.percent;
+        }
+      } else {
+        return -1;
+      }
+    });
   default:
-    break;
+    return [];
   }
 };
 
