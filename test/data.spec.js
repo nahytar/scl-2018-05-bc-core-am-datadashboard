@@ -182,7 +182,34 @@ describe('data', () => {
   });
 
   describe('processCohortData({ cohortData, orderBy, orderDirection, filterBy })', () => {
-    it('debería retornar arreglo de usuarios con propiedad stats y aplicar sort y filter');
+    const cohort = fixtures.cohorts.find(item => item.id === 'lim-2018-03-pre-core-pw');
+    const courses = Object.keys(cohort.coursesIndex);
+    const { users, progress } = fixtures;
+
+    it('debería retornar arreglo de usuarios con propiedad stats', () => {
+      const processed = processCohortData(courses, users, progress, 'percent', 'asc', '');
+
+      assert.equal(users.length, processed.length);
+
+      processed.forEach(user => {
+        assert.ok(user.hasOwnProperty('stats'));
+        assert.isNumber(user.stats.percent);
+        assert.isObject(user.stats.exercises);
+        assert.isObject(user.stats.quizzes);
+        assert.isObject(user.stats.reads);
+      });
+    });
+    it('debería retornar arreglo de usuarios ordenado por ejercicios completados ASC', () => {
+      const usersExersAsc = processCohortData(courses, users, progress, 'exercises', 'asc', '');
+
+      assert.equal(usersExersAsc[0].stats.exercises.percent, 0);
+      assert.equal(usersExersAsc[usersExersAsc.length - 1].stats.exercises.percent, 100);
+    });
+    it('debería retornar nuevo arreglo solo con usuarios con nombres que contengan string (case insensitive)', () => {
+      const processed = processCohortData(courses, users, progress, 'exercises', 'asc', 'Mayra');
+
+      assert.equal(processed.length, 3);
+    });
   });
 
 });

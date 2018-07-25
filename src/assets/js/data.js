@@ -86,76 +86,76 @@ window.computeUsersStats = (users, progress, courses) => {
 
 window.sortUsers = (users, orderBy, orderDirection) => {
   switch (orderBy) {
-  case 'name':
-    return users.sort((a, b) => {
-      if (orderDirection === 'asc') {
-        return a.name.localeCompare(b.name);
-      } else {
-        return b.name.localeCompare(a.name);
-      }
-    });
-  case 'percent':
-    return users.sort((a, b) => {
-      if (a.stats && b.stats) {
+    case 'name':
+      return users.sort((a, b) => {
         if (orderDirection === 'asc') {
-          return a.stats.percent - b.stats.percent;
+          return a.name.localeCompare(b.name);
         } else {
-          return b.stats.percent - a.stats.percent;
+          return b.name.localeCompare(a.name);
         }
-      } else {
-        return -1;
-      }
-    });
-  case 'exercises':
-    return users.sort((a, b) => {
-      if (a.stats && b.stats) {
-        if (orderDirection === 'asc') {
-          return a.stats.exercises.percent - b.stats.exercises.percent;
+      });
+    case 'percent':
+      return users.sort((a, b) => {
+        if (a.stats && b.stats) {
+          if (orderDirection === 'asc') {
+            return a.stats.percent - b.stats.percent;
+          } else {
+            return b.stats.percent - a.stats.percent;
+          }
         } else {
-          return b.stats.exercises.percent - a.stats.exercises.percent;
+          return -1;
         }
-      } else {
-        return -1;
-      }
-    });
-  case 'quizzes':
-    return users.sort((a, b) => {
-      if (a.stats && b.stats) {
-        if (orderDirection === 'asc') {
-          return a.stats.quizzes.percent - b.stats.quizzes.percent;
+      });
+    case 'exercises':
+      return users.sort((a, b) => {
+        if (a.stats && b.stats) {
+          if (orderDirection === 'asc') {
+            return a.stats.exercises.percent - b.stats.exercises.percent;
+          } else {
+            return b.stats.exercises.percent - a.stats.exercises.percent;
+          }
         } else {
-          return b.stats.quizzes.percent - a.stats.quizzes.percent;
+          return -1;
         }
-      } else {
-        return -1;
-      }
-    });
-  case 'quizzesAvg':
-    return users.sort((a, b) => {
-      if (a.stats && b.stats) {
-        if (orderDirection === 'asc') {
-          return a.stats.quizzes.scoreAvg - b.stats.quizzes.scoreAvg;
+      });
+    case 'quizzes':
+      return users.sort((a, b) => {
+        if (a.stats && b.stats) {
+          if (orderDirection === 'asc') {
+            return a.stats.quizzes.percent - b.stats.quizzes.percent;
+          } else {
+            return b.stats.quizzes.percent - a.stats.quizzes.percent;
+          }
         } else {
-          return b.stats.quizzes.scoreAvg - a.stats.quizzes.scoreAvg;
+          return -1;
         }
-      } else {
-        return -1;
-      }
-    });
-  case 'reads':
-    return users.sort((a, b) => {
-      if (a.stats && b.stats) {
-        if (orderDirection === 'asc') {
-          return a.stats.reads.percent - b.stats.reads.percent;
+      });
+    case 'quizzesAvg':
+      return users.sort((a, b) => {
+        if (a.stats && b.stats) {
+          if (orderDirection === 'asc') {
+            return a.stats.quizzes.scoreAvg - b.stats.quizzes.scoreAvg;
+          } else {
+            return b.stats.quizzes.scoreAvg - a.stats.quizzes.scoreAvg;
+          }
         } else {
-          return b.stats.reads.percent - a.stats.reads.percent;
+          return -1;
         }
-      } else {
-        return -1;
-      }
-    });
-  default:
-    return [];
+      });
+    case 'reads':
+      return users.sort((a, b) => {
+        if (a.stats && b.stats) {
+          if (orderDirection === 'asc') {
+            return a.stats.reads.percent - b.stats.reads.percent;
+          } else {
+            return b.stats.reads.percent - a.stats.reads.percent;
+          }
+        } else {
+          return -1;
+        }
+      });
+    default:
+      return [];
   }
 };
 
@@ -169,8 +169,12 @@ window.filterUsers = (users, search) => {
   return users;
 };
 
-window.processCohortData = (options, cohortData, users, progress, orderBy, sortUsers, orderDirection, search) => {
+window.processCohortData = (cohortData, users, progress, orderBy, orderDirection, search) => {
+  let processed = computeUsersStats(users, progress, cohortData);
+  processed = filterUsers(processed, search);
+  processed = sortUsers(processed, orderBy, orderDirection);
 
+  return processed;
 };
 
 
