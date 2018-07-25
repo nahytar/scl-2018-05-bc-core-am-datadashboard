@@ -28,7 +28,7 @@ const toggle = (event) => {
   // evita la propagacion del evento al los tags padres.
   event.stopPropagation();
 };
-
+// se llama al API
 const getData = (url) => {
   req.open('GET', url, false);
   req.send(null);
@@ -39,31 +39,37 @@ const getData = (url) => {
   return [];
 };
 
+// borra todos los usuarios anteriores para poder escribir los filtrados
+const removeUsersFromDom = (studentsDiv) => {
+  let fc = studentsDiv.getElementsByClassName('student').item(0);
+  while (fc) {
+    studentsDiv.removeChild(fc);
+    fc = studentsDiv.getElementsByClassName('student').item(0);
+  }
+};
+
+// carga los users desde la API
 const loadUsers = (cohort) => {
   let studentP;
   let studentDiv;
   let progressDiv;
   const studentsDiv = document.getElementById('students-' + cohort.id);
   const filter = document.getElementById('input-' + cohort.id).value.toUpperCase();
-
-  let fc = studentsDiv.getElementsByClassName('student').item(0);
-
-  while (fc) {
-    studentsDiv.removeChild(fc);
-    fc = studentsDiv.getElementsByClassName('student').item(0);
-  }
+  const orderly = document.getElementById('orderly-' + cohort.id).value;
+  const direction = document.getElementById('direction-' + cohort.id).value;
+  
+  removeUsersFromDom(studentsDiv);
 
   // si cohort no tiene users
   if (!cohort.users) {
     // busca las usuarias desde el API
     cohort.users = getData(`https://api.laboratoria.la/cohorts/${cohort.id}/users`);
-    // busca los progresos desde el API
-    let progress = getData(`https://api.laboratoria.la/cohorts/${cohort.id}/progress`);
-    // une los progresos con sus respectivas usuarias a traves del metodo declarado en data.js
-    cohort.users = computeUsersStats(cohort.users, progress, Object.keys(cohort.coursesIndex));
   }
+  // busca los progresos desde el API
+  let progress = getData(`https://api.laboratoria.la/cohorts/${cohort.id}/progress`);
 
-  filterUsers(cohort.users, filter).forEach((student) => {
+  // se llama a la funcion filterUser y se dibuja los usuarios resultantes
+  processCohortData(Object.keys(cohort.coursesIndex), cohort.users, progress, orderly, direction, filter).forEach((student) => {
     studentP = document.createElement('p');
     studentP.append(document.createTextNode(student.name + ' ' + student.stats.percent + '%'));
 
@@ -79,8 +85,6 @@ const loadUsers = (cohort) => {
     studentsDiv.append(studentDiv);
   });
 };
-
-// const drawUsers = 
 
 // ========================================================
 // se obtiene los tags desde el HTML
@@ -98,7 +102,6 @@ let cohortDiv;
 let cohortP;
 let cohortName;
 let studentsDiv;
-let studentsFilter;
 let idAlumnas;
 
 // objeto que se encarga de hacer los llamados al API
@@ -149,6 +152,80 @@ if (req.status === 200) {
     });
   });
 }
+
+const createOption = (description, value) => {
+  const option = document.createElement('option');
+  option.setAttribute('value', value);
+  var text = document.createTextNode(description);
+  option.appendChild(text);
+
+  return option;
+};
+
+const createSelectDirection = (cohort) => {
+  const selectDirection = document.createElement('select');
+  selectDirection.appendChild(createOption('Ascendente', 'asc'));
+  selectDirection.appendChild(createOption('Descendente', 'desc'));
+  selectDirection.classList.add('direction');
+  selectDirection.setAttribute('id', 'direction-' + cohort.id);
+  selectDirection.addEventListener('click', (event) => {
+    event.stopPropagation();
+  });
+  // al escribir en el filtro se llama a loadUsers
+  selectDirection.addEventListener('change', () => {
+    loadUsers(cohort);
+  });
+
+  return selectDirection;
+};
+
+const createOrderlyCriterion = (cohort) => {
+  const orderlyCriterion = document.createElement('select');
+  orderlyCriterion.appendChild(createOption('Nombre', 'name'));
+  orderlyCriterion.appendChild(createOption('Porcenjate de completitud', 'percent'));
+  orderlyCriterion.appendChild(createOption('Ejercicios', 'exercises'));
+  orderlyCriterion.appendChild(createOption('Porcentaje de Quizzes', 'quizzes'));
+  orderlyCriterion.appendChild(createOption('Promerdio de Quizzes', 'quizzesAvg'));
+  orderlyCriterion.appendChild(createOption('Lecturas', 'reads'));
+  orderlyCriterion.classList.add('orderly');
+  orderlyCriterion.setAttribute('id', 'orderly-' + cohort.id);
+  orderlyCriterion.addEventListener('click', (event) => {
+    event.stopPropagation();
+  });
+  // al escribir en el filtro se llama a loadUsers
+  orderlyCriterion.addEventListener('change', () => {
+    loadUsers(cohort);
+  });
+
+  return orderlyCriterion;
+};
+
+const createSearch = (cohort) => {
+  const studentsFilter = document.createElement('input');
+  studentsFilter.setAttribute('type', 'text');
+  studentsFilter.setAttribute('id', 'input-' + cohort.id);
+  studentsFilter.setAttribute('placeholder', 'Search');
+  studentsFilter.classList.add('search');
+
+  // se agrega un compotamiento al click del filtro para evitar la propagacion del evento a la estudiantes que estan por detras
+  studentsFilter.addEventListener('click', (event) => {
+    event.stopPropagation();
+  });
+  // al escribir en el filtro se llama a loadUsers
+  studentsFilter.addEventListener('keyup', () => {
+    loadUsers(cohort);
+  });
+
+  return studentsFilter;
+};
+
+const createFilter = (cohort) => {
+  const filterDiv = document.createElement('div');
+  filterDiv.appendChild(createOrderlyCriterion(cohort));
+  filterDiv.appendChild(createSelectDirection(cohort));
+  filterDiv.appendChild(createSearch(cohort));
+  return filterDiv;
+};
 
 // se recorre los sites
 sites.forEach(site => {
@@ -201,25 +278,11 @@ sites.forEach(site => {
       studentsDiv.classList.add('students', 'whiteCard');
       // a studentsDiv se le asigna  un id para poder ser bucado luego cuando se carga las students
       studentsDiv.id = 'students-' + cohort.id;
-
-
-      studentsFilter = document.createElement('input');
-      studentsFilter.setAttribute('type', 'text');
-      studentsFilter.setAttribute('id', 'input-' + cohort.id);
-      studentsFilter.setAttribute('placeholder', 'Search');
-      studentsFilter.classList.add('search');
-      studentsDiv.append(studentsFilter);
+      
+      studentsDiv.append(createFilter(cohort));
       cohortDiv.append(studentsDiv);
-      // se agrega un compotamiento al click del filtro para evitar la propagacion del evento a la estudiantes que estan por detras
-      studentsFilter.addEventListener('click', (event) => {
-        event.stopPropagation();
-      });
       // al hacer click en el cohort ademas de desplegar las students se carga las mismas desde el API
       cohortDiv.addEventListener('click', () => {
-        loadUsers(cohort);
-      });
-      // al escribir en el filtro se llama a loadUsers
-      studentsFilter.addEventListener('keyup', () => {
         loadUsers(cohort);
       });
       // se agrega el cohort a la lista de cohort
