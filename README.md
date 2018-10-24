@@ -1,6 +1,6 @@
 # Data Dashboard
 
-# Introducción
+## Introducción
 
 Data Dashboard es una interfaz que esta destinada para uso de la Training Managers (TMs) de Laboratoria. Esta interfaz permitirá facilitar el trabajo, que la data de información sea más amigable al poder visualizarse y permitirá que la toma de decisiones sea más ágil para la usuaria. 
 Para la interfaz debemos implementar en su construcción:
@@ -14,6 +14,9 @@ Para la interfaz debemos implementar en su construcción:
           * Filtrar/buscar alumnas por nombre.
 3.	Visualizarse sin problemas desde distintos tamaños de pantallas: móviles, tablets y desktops.
 4.	Incluir pruebas unitarias.
+
+![alt text](https://raw.githubusercontent.com/nahytar/scl-2018-05-bc-core-am-datadashboard/master/src/assets/img/imagenDataDashboard.png)
+
 
 # Planificacion del proyecto:
 
